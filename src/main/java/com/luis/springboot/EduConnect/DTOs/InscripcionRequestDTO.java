@@ -1,13 +1,12 @@
 package com.luis.springboot.EduConnect.DTOs;
 
-import com.luis.springboot.EduConnect.models.Curso;
-import com.luis.springboot.EduConnect.models.Usuario;
 import jakarta.validation.constraints.NotNull;
 
+//Recibiremos el id del usuario y el id del curso para crear una inscripción
 public record InscripcionRequestDTO (
         @NotNull
-        Usuario usuario,
+        Long idUsuario,
         @NotNull
-        Curso curso
+        Long idCurso
 ){
 }
