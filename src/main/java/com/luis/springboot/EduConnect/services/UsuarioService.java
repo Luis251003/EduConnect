@@ -1,22 +1,20 @@
 package com.luis.springboot.EduConnect.services;
 
-import com.luis.springboot.EduConnect.DTOs.AdminRequestDTO;
-import com.luis.springboot.EduConnect.DTOs.AdminResponseDTO;
-import com.luis.springboot.EduConnect.DTOs.EstudianteRequestDTO;
-import com.luis.springboot.EduConnect.DTOs.EstudianteResponseDTO;
+import com.luis.springboot.EduConnect.DTOs.UsuarioRequestDTO;
+import com.luis.springboot.EduConnect.DTOs.UsuarioResponseDTO;
 
 import java.util.List;
 
 public interface UsuarioService {
 
     //LISTAR ESTUDIANTES
-    List<EstudianteResponseDTO> listarEstudiantes();
+    List<UsuarioResponseDTO> listarEstudiantes();
 
     //GUARDAR UN ESTUDIANTE
-    EstudianteResponseDTO registrarEstudiante(EstudianteRequestDTO bean);
+    UsuarioResponseDTO registrarEstudiante(UsuarioRequestDTO bean);
 
     //GUARDAR UN ADMINISTRADOR
-    AdminResponseDTO registrarAdmin(AdminRequestDTO bean);
+    UsuarioResponseDTO registrarAdmin(UsuarioRequestDTO bean);
 
     //ELIMINAR ESTUDIANTE X ID
     void eliminarEstudianteXId(Long id);

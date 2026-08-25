@@ -1,13 +1,20 @@
 package com.luis.springboot.EduConnect.services;
 
-import com.luis.springboot.EduConnect.DTOs.InscripcionRequestDTO;
-import com.luis.springboot.EduConnect.DTOs.InscripcionResponseDTO;
+import com.luis.springboot.EduConnect.DTOs.*;
+import com.luis.springboot.EduConnect.exceptions.ResourceNotFoundException;
+import com.luis.springboot.EduConnect.models.Curso;
+import com.luis.springboot.EduConnect.models.Inscripcion;
+import com.luis.springboot.EduConnect.models.Rol;
+import com.luis.springboot.EduConnect.models.Usuario;
 import com.luis.springboot.EduConnect.repositories.CursoRepository;
 import com.luis.springboot.EduConnect.repositories.InscripcionRepository;
 import com.luis.springboot.EduConnect.repositories.UsuarioRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.ErrorResponseException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class InscripcionServiceImp implements InscripcionService{
@@ -24,21 +31,64 @@ public class InscripcionServiceImp implements InscripcionService{
         this.usuarioRepository = usuarioRepository;
     }
 
+    //CONVERTIR REQUEST A ENTITY
+    private Inscripcion mapToEntity(InscripcionRequestDTO bean) {
+        //OBTENER CURSO
+        Curso curso = cursoRepository
+                .findById(bean.idCurso())
+                .orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado con ID: " + bean.idCurso()));
+
+        //OBTENER ESTUDIANTE
+        Usuario estudiante = usuarioRepository
+                .findById(bean.idUsuario())
+                .orElseThrow(() -> new ResourceNotFoundException("Estudiante no encontrado con ID: " + bean.idUsuario()));
+
+        return new Inscripcion(estudiante,curso);
+    }
+
+    //CONVERTIR ENTITY A RESPONSE
+    private InscripcionResponseDTO mapToDTO(Inscripcion bean){
+        //OBTENER CURSO
+        Curso curso = cursoRepository
+                .findById(bean.getCurso().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado con ID: " + bean.getCurso().getId()));
+
+        //OBTENER ESTUDIANTE
+        Usuario estudiante = usuarioRepository
+                .findById(bean.getUsuario().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Estudiante no encontrado con ID: " + bean.getUsuario().getId()));
+
+        return new InscripcionResponseDTO(
+                new UsuarioResponseDTO(estudiante.getNombre(),estudiante.getEmail()),
+                new CursoResponseDTO(curso.getCodigo(),curso.getTitulo(),curso.getDescripcion()),
+                bean.getFechaInscripcion(),
+                bean.getEstado());
+    }
+
     //LISTAMOS TODAS LAS INSCRIPCIONES POR ID CURSO
     @Override
+    @Transactional(readOnly = true)
     public List<InscripcionResponseDTO> listarInscripcionesXIdCurso(Long id) {
-        return List.of();
+        return inscripcionRepository
+                .findByCursoIdWithDetails(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado con ID: " + id))
+                .stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     //REGISTRAMOS UNA NUEVA INSCRIPCION
     @Override
+    @Transactional
     public InscripcionResponseDTO registrarInscripcion(InscripcionRequestDTO bean) {
-        return null;
+        return mapToDTO(inscripcionRepository.save(mapToEntity(bean)));
     }
 
     //ELIMINAMOS UNA INSCRIPCION POR ID
     @Override
+    @Transactional
     public void eliminarInscripcionXId(Long id) {
-
+        Inscripcion bean = inscripcionRepository.findById(id).orElseThrow(()->new ResourceNotFoundException("Inscripción no encontrada con ID: " + id));
+        inscripcionRepository.delete(bean);
     }
 }

@@ -1,8 +1,0 @@
-package com.luis.springboot.EduConnect.DTOs;
-
-//Devolveremos el nombre y correo del estudiante
-public record EstudianteResponseDTO (
-        String nombre,
-        String correo
-){
-}
