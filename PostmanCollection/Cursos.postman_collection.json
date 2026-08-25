@@ -1,0 +1,184 @@
+{
+  "info": {
+    "_postman_id": "c8c4aa61-49ad-4061-ae42-f62e2990d782",
+    "name": "Cursos",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "38415320"
+  },
+  "item": [
+    {
+      "name": "Agregar estudiante",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Academic-Term",
+            "value": "2026-02",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nombre\":\"Cesar Acuña Peralta\",\r\n    \"correo\":\"cesar.peralta@gmail.com\",\r\n    \"password\":\"esPlagio69\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/estudiantes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "estudiantes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener estudiantes",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "pedro.castillo@gmail.com",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "palabraDeMaestro",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "X-Academic-Term",
+            "value": "2026-02",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "file",
+          "file": {
+            "src": ""
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/estudiantes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "estudiantes"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Eliminar estudiante",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "pedro.castillo@gmail.com",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "palabraDeMaestro",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "X-Academic-Term",
+            "value": "2026-02",
+            "disabled": true
+          }
+        ],
+        "url": {
+          "raw": "http://localhost:8080/api/estudiantes/2",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "estudiantes",
+            "2"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Validación estudiante",
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "pedro.castillo@gmail.com",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "palabraDeMaestro",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "X-Academic-Term",
+            "value": "2026-02",
+            "disabled": true
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"nombre\":\"\",\r\n    \"correo\":\"\",\r\n    \"password\":\"\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/estudiantes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "estudiantes"
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
