@@ -28,7 +28,7 @@ public class CursoServiceImp implements CursoService{
 
     //CONVERTIR ENTITY A RESPONSE
     private CursoResponseDTO mapToDTO(Curso bean){
-        return new CursoResponseDTO(bean.getCodigo(),bean.getTitulo(),bean.getDescripcion());
+        return new CursoResponseDTO(bean.getId(),bean.getCodigo(),bean.getTitulo(),bean.getDescripcion());
     }
 
     //LISTAR TODOS LOS CURSOS

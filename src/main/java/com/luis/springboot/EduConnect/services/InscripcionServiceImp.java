@@ -1,21 +1,23 @@
 package com.luis.springboot.EduConnect.services;
 
 import com.luis.springboot.EduConnect.DTOs.*;
+import com.luis.springboot.EduConnect.context.AppContextHolder;
 import com.luis.springboot.EduConnect.exceptions.ResourceNotFoundException;
+import com.luis.springboot.EduConnect.exceptions.UnauthorizedAccessException;
 import com.luis.springboot.EduConnect.models.Curso;
 import com.luis.springboot.EduConnect.models.Inscripcion;
-import com.luis.springboot.EduConnect.models.Rol;
 import com.luis.springboot.EduConnect.models.Usuario;
 import com.luis.springboot.EduConnect.repositories.CursoRepository;
 import com.luis.springboot.EduConnect.repositories.InscripcionRepository;
 import com.luis.springboot.EduConnect.repositories.UsuarioRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.ErrorResponseException;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 public class InscripcionServiceImp implements InscripcionService{
 
@@ -59,8 +61,9 @@ public class InscripcionServiceImp implements InscripcionService{
                 .orElseThrow(() -> new ResourceNotFoundException("Estudiante no encontrado con ID: " + bean.getUsuario().getId()));
 
         return new InscripcionResponseDTO(
-                new UsuarioResponseDTO(estudiante.getNombre(),estudiante.getEmail()),
-                new CursoResponseDTO(curso.getCodigo(),curso.getTitulo(),curso.getDescripcion()),
+                bean.getId(),
+                new UsuarioResponseDTO(estudiante.getId(),estudiante.getNombre(),estudiante.getEmail()),
+                new CursoResponseDTO(estudiante.getId(),curso.getCodigo(),curso.getTitulo(),curso.getDescripcion()),
                 bean.getFechaInscripcion(),
                 bean.getEstado());
     }
@@ -69,6 +72,16 @@ public class InscripcionServiceImp implements InscripcionService{
     @Override
     @Transactional(readOnly = true)
     public List<InscripcionResponseDTO> listarInscripcionesXIdCurso(Long id) {
+
+        String appName = AppContextHolder.getAppName();
+
+        log.info("Aplicación cliente recibida desde el servicio: {}",appName);
+
+        if(!"2026-02".equals(appName)){
+            log.warn("Intento de acceso no autorizado con la app: {}",appName);
+            throw new UnauthorizedAccessException("Aplicación no autorizada");
+        }
+
         return inscripcionRepository
                 .findByCursoIdWithDetails(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Curso no encontrado con ID: " + id))

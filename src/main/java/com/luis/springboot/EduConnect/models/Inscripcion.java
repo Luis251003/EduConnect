@@ -33,6 +33,8 @@ public class Inscripcion {
     private Boolean estado;
 
     public Inscripcion(Usuario usuario,Curso curso){
+        this.usuario = usuario;
+        this.curso = curso;
         this.fechaInscripcion = LocalDate.now();
         this.estado = true;
     }

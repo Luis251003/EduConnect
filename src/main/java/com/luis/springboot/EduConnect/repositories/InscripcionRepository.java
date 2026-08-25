@@ -10,6 +10,6 @@ import java.util.Optional;
 
 public interface InscripcionRepository extends JpaRepository<Inscripcion,Long> {
 
-    @Query("SELECT i From Inscripcion i JOIN FETCH i.estudiante JOIN FETCH i.curso WHERE i.curso.id = :cursoId")
+    @Query("SELECT i From Inscripcion i JOIN FETCH i.usuario JOIN FETCH i.curso WHERE i.curso.id = :cursoId")
     Optional<List<Inscripcion>> findByCursoIdWithDetails(@Param("cursoId") Long cursoId);
 }
